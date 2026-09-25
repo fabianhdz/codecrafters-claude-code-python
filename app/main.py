@@ -1,6 +1,7 @@
 import argparse
 import os
 import sys
+import json
 
 from openai import OpenAI
 
@@ -9,13 +10,8 @@ BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v
 
 
 
-def runReadTool(filePath: str) -> str:
-    filePath = filePath.split(": ")
-    path = ""
-    for ch in filePath[1]:
-        if ch == '\"' or ch == '{' or ch == '}':
-            continue
-        path += ch
+def runReadTool(filePath: json) -> str:
+    path = json.loads(filePath)
 
     with open(path, "r") as f:
         return f.read() 
@@ -68,7 +64,7 @@ def main():
     else:
         for tool in chat.choices[0].message.tool_calls:
             if tool.function.name == "Read":
-                print(runReadTool(tool.function.arguments))
+                print(runReadTool(tool.funciotn.arguments))
 
 
 
