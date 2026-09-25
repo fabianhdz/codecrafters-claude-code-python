@@ -14,9 +14,7 @@ def runReadTool(filePath: str) -> str:
     print(f"{filePath} is what", file=sys.stderr)
     path = ""
     for ch in filePath[1]:
-        if ch == "\\":
-            break
-        if ch == '\"':
+        if ch == '\"' or ch == '{' or ch == '}':
             continue
         path += ch
 
