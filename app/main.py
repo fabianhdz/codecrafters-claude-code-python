@@ -8,6 +8,20 @@ API_KEY = os.getenv("OPENROUTER_API_KEY")
 BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1")
 
 
+
+def runReadTool(filePath: str) -> str:
+    filePath = filePath.split(": \"")
+    path = ""
+    for ch in filePath:
+        if ch == "\\":
+            break
+        path += ch
+
+    with open(path, "r") as f:
+        return f.read() 
+            
+
+
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("-p", required=True)
@@ -22,7 +36,8 @@ def main():
         model="anthropic/claude-haiku-4.5",
         messages=[{"role": "user", "content": args.p}],
         tools = [
-            {"type": "function",  
+            {
+                "type": "function",  
                   "function": {
                        "name": "Read", 
                        "description": "Read and return the content of a file",
@@ -47,8 +62,15 @@ def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
     print("Logs from your program will appear here!", file=sys.stderr)
 
-    # TODO: Uncomment the following line to pass the first stage
-    print(chat.choices[0].message.content)
+
+    if not chat.choices[0].message.tool_calls:
+        print(chat.choices[0].message.content)
+    else:
+        for tool in chat.choices[0].message.tool_calls:
+            if tool.function.name == "Read":
+                print(runReadTool(tool.function.arguments))
+
+
 
 
 if __name__ == "__main__":
