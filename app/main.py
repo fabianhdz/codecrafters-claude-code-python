@@ -10,10 +10,10 @@ BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v
 
 
 
-def runReadTool(filePath: json) -> str:
-    path = json.loads(filePath)
+def runReadTool(args: dict) -> str:
+    
 
-    with open(path, "r") as f:
+    with open(args["file_path"], "r") as f:
         return f.read() 
             
 
@@ -64,7 +64,8 @@ def main():
     else:
         for tool in chat.choices[0].message.tool_calls:
             if tool.function.name == "Read":
-                print(runReadTool(tool.funciotn.arguments))
+                args = json.loads(tool.function.arguments)
+                print(runReadTool(args))
 
 
 
