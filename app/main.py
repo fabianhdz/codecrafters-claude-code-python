@@ -11,7 +11,7 @@ BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v
 
 def runReadTool(filePath: str) -> str:
     filePath = filePath.split(": \"")
-    print("{filepath} is what", file=sys.stderr)
+    print(f"{filePath} is what", file=sys.stderr)
     path = ""
     for ch in filePath:
         if ch == "\\":
