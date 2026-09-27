@@ -91,7 +91,7 @@ def main():
                     }
                     messages.append(usage)
                     messages.append(result)
-                print(chat.choices.message.content)
+                print(chat.choices[0].message.content)
 
 
 
