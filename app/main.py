@@ -72,12 +72,10 @@ def main():
 
 
         if not chat.choices[0].message.tool_calls:
-            print("final round", file=sys.stderr)
             print(chat.choices[0].message.content)
             break
         else:
             for tool in chat.choices[0].message.tool_calls:
-                print("Making tool call", file=sys.stderr)
                 args = json.loads(tool.function.arguments)
                 result = executeTool(tool.function.name, args)
 
