@@ -14,6 +14,11 @@ def runReadTool(args: dict) -> str:
     
     with open(args["file_path"], "r") as f:
         return f.read() 
+
+def executeTool(name: str, args):
+    if name == "Read":
+        return runReadTool(args)
+    raise ValueError(f"Unknown function: {name}")
             
 
 
@@ -71,27 +76,28 @@ def main():
             break
         else:
             for tool in chat.choices[0].message.tool_calls:
-                if tool.function.name == "Read":
-                    args = json.loads(tool.function.arguments)
-                    usage = {
-                            "role": "assistant",
-                            "content": None,
-                            "tool_calls": [
-                                {
-                                    "id": tool.id,
-                                    "type": tool.type,
-                                    "function": tool.function,
-                                },
-                            ]
-                    }
-                    result = {
-                                "role": "tool",
-                                "tool_call_id": tool.id,
-                                "content": runReadTool(args)
-                    }
-                    messages.append(usage)
-                    messages.append(result)
-                print(chat.choices[0].message.content)
+                args = json.loads(tool.function.arguments)
+                result = executeTool(tool.function.name, args)
+
+                usage = {
+                        "role": "assistant",
+                        "content": None,
+                        "tool_calls": [
+                            {
+                                "id": tool.id,
+                                "type": tool.type,
+                                "function": tool.function,
+                            },
+                        ]
+                }
+                output = {
+                            "role": "tool",
+                            "tool_call_id": tool.id,
+                            "content": result
+                }
+                messages.append(usage)
+                messages.append(output)
+            print(chat.choices[0].message.content)
 
 
 
