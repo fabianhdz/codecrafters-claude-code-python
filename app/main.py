@@ -17,8 +17,9 @@ def runReadTool(args: dict) -> str:
 
 def runWriteTool(args: dict):
 
-    with open(args["file_path"], "w") as f:
+    with open(args["file_path"], "w", encoding="utf-8") as f:
         f.write(args["content"])
+    return
 
 def executeTool(name: str, args):
     if name == "Read":
