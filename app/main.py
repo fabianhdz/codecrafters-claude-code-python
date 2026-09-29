@@ -15,9 +15,16 @@ def runReadTool(args: dict) -> str:
     with open(args["file_path"], "r") as f:
         return f.read() 
 
+def runWriteTool(args: dict):
+
+    with open(args["file_path"], "w") as f:
+        f.write(args["content"])
+
 def executeTool(name: str, args):
     if name == "Read":
         return runReadTool(args)
+    elif name == "Write":
+        return runWriteTool(args)
     raise ValueError(f"Unknown function: {name}")
             
 
@@ -49,11 +56,32 @@ def main():
                                         "description": "The path of the file to read"
                                     }
                                 },
-                                "required": ["file_path"]
-                            } 
+                            "required": ["file_path"]
+                        } 
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "Write",
+                        "description": "Write content to a file",
+                        "parameters": {
+                            "type:": "object",
+                            "required": ["file_path", "content"],
+                            "properties": {
+                                "file_path": {
+                                    "type": "string",
+                                    "description": "The path of the file to write to",
+                                },
+                                "content": {
+                                    "type": "string",
+                                    "description": "The content to write to the file",
+                                }
+                            }
                         }
                     }
-                ]
+                }
+            ]
 
     
     while(True):
