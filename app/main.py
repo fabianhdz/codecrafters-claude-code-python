@@ -19,7 +19,7 @@ def runWriteTool(args: dict):
 
     with open(args["file_path"], "w", encoding="utf-8") as f:
         f.write(args["content"])
-    return
+    return "Created the file"
 
 def executeTool(name: str, args):
     if name == "Read":
