@@ -24,7 +24,7 @@ def runWriteTool(args: dict):
 
 def runBashTool(args: dict):
     print(args["command"], file=sys.stderr)
-    return subprocess.run(args["command"], capture_output=True)
+    return subprocess.run(args["command"], shell=True, capture_output=True)
 
 def executeTool(name: str, args):
     if name == "Read":
