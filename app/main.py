@@ -2,6 +2,7 @@ import argparse
 import os
 import sys
 import json
+import subprocess
 
 from openai import OpenAI
 
@@ -21,10 +22,15 @@ def runWriteTool(args: dict):
         f.write(args["content"])
     return "Created the file"
 
+def runBashTool(args: dict):
+    return subprocess.run(args["command"], capture_output=True)
+
 def executeTool(name: str, args):
     if name == "Read":
         return runReadTool(args)
     elif name == "Write":
+        return runWriteTool(args)
+    elif name == "Bash":
         return runWriteTool(args)
     raise ValueError(f"Unknown function: {name}")
             
@@ -81,7 +87,24 @@ def main():
                             }
                         }
                     }
-                }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "Bash",
+                        "description": "Execute a shell command",
+                        "parameters" : {
+                            "type": "object",
+                            "required" : ["command"],
+                            "properties": {
+                                "command": {
+                                    "type": "string",
+                                    "descripton": "The command to execute"
+                                }
+                            }
+                        }
+                    }
+                },
             ]
 
     
