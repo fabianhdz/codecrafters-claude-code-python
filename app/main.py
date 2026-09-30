@@ -31,7 +31,7 @@ def executeTool(name: str, args):
     elif name == "Write":
         return runWriteTool(args)
     elif name == "Bash":
-        return runWriteTool(args)
+        return runBashTool(args)
     raise ValueError(f"Unknown function: {name}")
             
 
