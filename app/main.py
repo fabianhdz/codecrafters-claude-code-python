@@ -24,8 +24,12 @@ def runWriteTool(args: dict):
 
 def runBashTool(args: dict):
     print(args["command"], file=sys.stderr)
-    return subprocess.run(args["command"], shell=True, capture_output=True)
+    output = subprocess.run(args["command"], shell=True, capture_output=True)
 
+    if output.returncode:
+        return output.stderr
+    return output.stdout
+    
 def executeTool(name: str, args):
     if name == "Read":
         return runReadTool(args)
