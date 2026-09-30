@@ -23,7 +23,8 @@ def runWriteTool(args: dict):
     return "Created the file"
 
 def runBashTool(args: dict):
-    return subprocess.run(*args["command"], capture_output=True)
+    print(args["command"], file=sys.stderr)
+    return subprocess.run(args["command"], capture_output=True)
 
 def executeTool(name: str, args):
     if name == "Read":
