@@ -17,10 +17,11 @@ def parseYaml(path):
     
     return metadata
 
-def getSkillsNames():
+def getSkillsNames() -> list[str]:
 
     dir_path = Path(".claude/skills")
-
+    if not dir_path.exists():
+        return []
     skills_names = []
     for item in dir_path.iterdir():
         if item.is_dir():
