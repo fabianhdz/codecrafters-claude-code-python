@@ -6,6 +6,9 @@ import subprocess
 
 from openai import OpenAI
 
+from skills import getSkills
+
+
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1")
 
@@ -52,15 +55,11 @@ def main():
     client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
 
     model = "anthropic/claude-haiku-4.5"
-    skills = {
-                "role": "system", "content":
-                "You have access to the following skills: \n\n"
-                "- apple: Deploys the apple service to production.\n"
-                "- grape: Runs the grape test suite and reports failures.\n"
-                "- quarts: Generates releases notes for the analytics projects.\n"
-                "- cinder: Deploys the billing service to production.\n"
-            }
-    messages =  [skills, {"role": "user", "content": args.p}]
+    skills = getSkills()
+    messages =  [
+                    {"role": "system", "content": f"You have access to the following:\n\n{skills}"},
+                    {"role": "user", "content": args.p}
+                ]
 
     tools = [
                 {
@@ -120,6 +119,7 @@ def main():
                 },
             ]
 
+    
     
     while(True):
 
