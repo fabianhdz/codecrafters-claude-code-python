@@ -58,7 +58,7 @@ def main():
                "- grape: Runs the grape test suite and reports failures.\n"
                ""
                }
-    messages = skills + [{"role": "user", "content": args.p}]
+    messages =  [skills, {"role": "user", "content": args.p}]
 
     tools = [
                 {
