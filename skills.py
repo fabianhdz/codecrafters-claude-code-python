@@ -36,7 +36,7 @@ def getSkills() -> list[str]:
 
         skillPath = f".claude/skills/{skill}/SKILL.md"
         frontmatter = parseYaml(skillPath)
-        skills.append(f"-{frontmatter["name"]}: {frontmatter["description"]}\n")
+        skills.append(f"- {frontmatter["name"]}: {frontmatter["description"]}\n")
 
     return skills
 
