@@ -52,12 +52,14 @@ def main():
     client = OpenAI(api_key=API_KEY, base_url=BASE_URL)
 
     model = "anthropic/claude-haiku-4.5"
-    skills = {"role": "system", "content":
-               "You have access to the following skills: \n\n"
-               "- apple: Deploys the apple service to production.\n"
-               "- grape: Runs the grape test suite and reports failures.\n"
-               ""
-               }
+    skills = {
+                "role": "system", "content":
+                "You have access to the following skills: \n\n"
+                "- apple: Deploys the apple service to production.\n"
+                "- grape: Runs the grape test suite and reports failures.\n"
+                "- quarts: Generates releases notes for the analytics projects.\n"
+                "- cinder: Deploys the billing service to production.\n"
+            }
     messages =  [skills, {"role": "user", "content": args.p}]
 
     tools = [
