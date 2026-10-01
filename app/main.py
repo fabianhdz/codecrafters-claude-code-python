@@ -57,7 +57,7 @@ def main():
     model = "anthropic/claude-haiku-4.5"
     skills = getSkills()
     messages =  [
-                    {"role": "system", "content": f"You have access to the following:\n\n{skills}"},
+                    {"role": "system", "content": f"You have access to the following:\n\n{"".join(skills)}"},
                     {"role": "user", "content": args.p}
                 ]
 
