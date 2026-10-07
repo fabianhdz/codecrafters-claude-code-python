@@ -59,7 +59,7 @@ def main():
     skills = getSkills()
 
     if args.p[0] == '/':
-        skillBody = getSkillBody()
+        skillBody = getSkillBody(args.p[1:])
         args.p = skillBody
     
     messages =  [
