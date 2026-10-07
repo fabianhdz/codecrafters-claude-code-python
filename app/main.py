@@ -6,7 +6,7 @@ import subprocess
 
 from openai import OpenAI
 
-from skills import getSkills, getSkillBody
+from app.skills import getSkills, getSkillBody
 
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")

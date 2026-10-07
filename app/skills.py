@@ -11,6 +11,7 @@ def parseYaml(path, section):
 
     if text.startswith("---"):
         content = text.split("---", 2)
+    
 
     if section == "frontmatter":
         yaml_data = content[1]
