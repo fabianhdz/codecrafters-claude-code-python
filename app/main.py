@@ -49,6 +49,8 @@ def main():
     p.add_argument("-p", required=True)
     args = p.parse_args()
 
+    print(args)
+
     if not API_KEY:
         raise RuntimeError("OPENROUTER_API_KEY is not set")
 
