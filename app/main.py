@@ -6,7 +6,7 @@ import subprocess
 
 from openai import OpenAI
 
-from skills import getSkills
+from skills import getSkills, getSkillBody
 
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -49,7 +49,6 @@ def main():
     p.add_argument("-p", required=True)
     args = p.parse_args()
 
-    print(args)
 
     if not API_KEY:
         raise RuntimeError("OPENROUTER_API_KEY is not set")
@@ -58,6 +57,11 @@ def main():
 
     model = "anthropic/claude-haiku-4.5"
     skills = getSkills()
+
+    if args.p[0] == '/':
+        skillBody = getSkillBody()
+        args.p = skillBody
+    
     messages =  [
                     {"role": "system", "content": f"You have access to the following:\n\n{"".join(skills)}"},
                     {"role": "user", "content": args.p}

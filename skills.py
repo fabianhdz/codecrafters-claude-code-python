@@ -4,7 +4,7 @@ import yaml
 from pathlib import Path
 
 
-def parseYaml(path):
+def parseYaml(path, section):
 
     with open(path, 'r', encoding="utf-8") as f:
         text = f.read()
@@ -12,8 +12,13 @@ def parseYaml(path):
     if text.startswith("---"):
         content = text.split("---", 2)
 
-    yaml_data = content[1]
-    metadata = yaml.safe_load(yaml_data)
+    if section == "frontmatter":
+        yaml_data = content[1]
+        metadata = yaml.safe_load(yaml_data)
+
+    else: # section is body 
+        return content[2]
+
     
     return metadata
 
@@ -40,6 +45,14 @@ def getSkills() -> list[str]:
         skills.append(f"- {frontmatter["name"]}: {frontmatter["description"]}\n")
 
     return skills
+
+
+def getSkillBody(skillName):
+
+    skillPath = f".claude/skills/{skillName}/SKILL.md"
+    body = parseYaml(skillPath)
+
+    return body
 
         
     
