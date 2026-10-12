@@ -6,41 +6,12 @@ import subprocess
 
 from openai import OpenAI
 
-from app.skills import getSkills, getSkillBody
+from .skills import getSkills, getSkillBody
+from .tools import executeTool
 
 
 API_KEY = os.getenv("OPENROUTER_API_KEY")
 BASE_URL = os.getenv("OPENROUTER_BASE_URL", default="https://openrouter.ai/api/v1")
-
-
-
-def runReadTool(args: dict) -> str:
-    
-    with open(args["file_path"], "r") as f:
-        return f.read() 
-
-def runWriteTool(args: dict):
-
-    with open(args["file_path"], "w", encoding="utf-8") as f:
-        f.write(args["content"])
-    return "Created the file"
-
-def runBashTool(args: dict):
-    print(args["command"], file=sys.stderr)
-    output = subprocess.run(args["command"], shell=True, capture_output=True, text=True)
-
-    if output.returncode:
-        return output.stderr
-    return output.stdout
-    
-def executeTool(name: str, args):
-    if name == "Read":
-        return runReadTool(args)
-    elif name == "Write":
-        return runWriteTool(args)
-    elif name == "Bash":
-        return runBashTool(args)
-    raise ValueError(f"Unknown function: {name}")
             
 
 
@@ -57,9 +28,10 @@ def main():
 
     model = "anthropic/claude-haiku-4.5"
     skills = getSkills()
+    arguments = args.p.split()
 
-    if args.p[0] == '/':
-        skillBody = getSkillBody(args.p[1:])
+    if args.p[0] == '/':    
+        skillBody = getSkillBody(arguments[0][1:], arguments[1:]) #/skill, arguments
         args.p = skillBody
     
     messages =  [

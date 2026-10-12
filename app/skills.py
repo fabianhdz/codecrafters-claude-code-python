@@ -48,7 +48,7 @@ def getSkills() -> list[str]:
     return skills
 
 
-def getSkillBody(skillName):
+def getSkillBody(skillName, arguments):
 
     skillPath = f".claude/skills/{skillName}/SKILL.md"
     body = parseYaml(skillPath, "body")
