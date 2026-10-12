@@ -31,6 +31,7 @@ def main():
     arguments = args.p.split()
 
     if args.p[0] == '/':    
+        print(arguments[0][1:], file=sys.stderr)
         skillBody = getSkillBody(arguments[0][1:], arguments[1:]) #/skill, arguments
         args.p = skillBody
     
