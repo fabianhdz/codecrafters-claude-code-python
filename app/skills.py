@@ -50,6 +50,9 @@ def getSkills() -> list[str]:
     return skills
 
 def parseBody(text, arguments):
+    if arguments is None:
+        arguments = []
+
     idx = 0
     arg_list = []
     while(True):
@@ -59,8 +62,12 @@ def parseBody(text, arguments):
         $ARGUMENTS[0], $ARGUMENTS[1], ..
         $0, $1, $2, …
         '''
-        idx = text.find("$", idx) + 1
-        match = re.search(r'\S+', text[idx:])
+        dollar_idx = text.find("$", idx)
+        if dollar_idx == -1:
+            break
+
+        idx = dollar_idx + 1
+        match = re.match(r'ARGUMENTS(?:\[\d+\])?|\d+', text[idx:])
 
         if match:
             arg = match.group() 
@@ -70,28 +77,25 @@ def parseBody(text, arguments):
                 arg_list.append((idx, arg))
             elif arg.isdigit():
                 arg_list.append((idx, arg))
-        else:
-            break
-
+                
     index_sum = 0
     for idx, arg in arg_list:
         if arg == "ARGUMENTS":
-            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments, 1) # idx-1 to get $
-            text = text[:index_sum + idx-1] + updated_text + text[idx:]
-            index_sum =  index_sum + len(arguments)
+            replacement = " ".join(arguments)
 
         elif '[' in arg and ']' in arg and "ARGUMENTS" in arg:
             digit = re.search(r'\d+',arg)
             if digit:
                 i = int(digit.group())
-            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments[i], 1)
-            text = text[:index_sum + idx-1] + updated_text + text[idx:]
-            index_sum = index_sum + len(arguments[i])
+            replacement = arguments[i]
         else:
             i = int(arg)
-            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments[i], 1)
-            text = text[:index_sum + idx-1] + updated_text + text[idx:]
-            index_sum = index_sum + len(arguments[i])
+            replacement = arguments[i]
+
+        placeholder = "$" + arg
+        start = index_sum + idx - 1
+        text = text[:start] + replacement + text[start + len(placeholder):]
+        index_sum += len(replacement) - len(placeholder)
 
     return text
 
