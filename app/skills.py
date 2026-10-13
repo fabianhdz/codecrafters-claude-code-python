@@ -63,13 +63,16 @@ def parseBody(text, arguments):
 
         if match:
             arg = match.group() 
-            print("Argumement test:", arg)
             if arg == "ARGUMENTS":
                 arg_list.append((idx, arg))
             elif '[' in arg and ']' in arg and "ARGUMENTS" in arg:
                 arg_list.append((idx, arg))
             elif arg.isdigit():
                 arg_list.append((idx, arg))
+        else:
+            break
+
+    print(arg_list)
 
     
 
