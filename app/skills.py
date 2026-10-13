@@ -1,6 +1,7 @@
 import os
 import yaml
 import re
+import sys
 
 from pathlib import Path
 
@@ -72,7 +73,7 @@ def parseBody(text, arguments):
         else:
             break
 
-    print(arg_list)
+    print(arg_list, file=sys.stderr)
 
     
 
