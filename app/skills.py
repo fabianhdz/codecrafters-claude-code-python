@@ -73,7 +73,27 @@ def parseBody(text, arguments):
         else:
             break
 
-    print(arg_list, file=sys.stderr)
+    index_sum = 0
+    for idx, arg in arg_list:
+        if arg == "ARGUMENTS":
+            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments, 1) # idx-1 to get $
+            text = text[:index_sum + idx-1] + updated_text + text[idx:]
+            index_sum =  index_sum + len(arguments)
+
+        elif '[' in arg and ']' in arg and "ARGUMENTS" in arg:
+            digit = re.search(r'\d+',arg)
+            if digit:
+                i = int(digit.group())
+            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments[i], 1)
+            text = text[:index_sum + idx-1] + updated_text + text[idx:]
+            index_sum = index_sum + len(arguments[i])
+        else:
+            i = int(arg)
+            updated_text = text[index_sum + idx-1:].replace("$" + arg, arguments[i], 1)
+            text = text[:index_sum + idx-1] + updated_text + text[idx:]
+            index_sum = index_sum + len(arguments[i])
+
+    return text
 
     
 
