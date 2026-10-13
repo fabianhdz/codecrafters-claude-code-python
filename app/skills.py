@@ -1,5 +1,6 @@
 import os
 import yaml
+import re
 
 from pathlib import Path
 
@@ -47,13 +48,38 @@ def getSkills() -> list[str]:
 
     return skills
 
+def parseBody(text, arguments):
+    idx = 0
+    arg_list = []
+    while(True):
+        '''
+        Find arguments types:
+        $ARGUMENTS
+        $ARGUMENTS[0], $ARGUMENTS[1], ..
+        $0, $1, $2, …
+        '''
+        idx = text.find("$", idx) + 1
+        match = re.search(r'\S+', text[idx:])
+
+        if match:
+            arg = match.group() 
+            print("Argumement test:", arg)
+            if arg == "ARGUMENTS":
+                arg_list.append((idx, arg))
+            elif '[' in arg and ']' in arg and "ARGUMENTS" in arg:
+                arg_list.append((idx, arg))
+            elif arg.isdigit():
+                arg_list.append((idx, arg))
+
+    
+
 
 def getSkillBody(skillName, arguments):
 
     skillPath = f".claude/skills/{skillName}/SKILL.md"
     body = parseYaml(skillPath, "body")
-
-    return body
+    text = parseBody(body, arguments)
+    return text
 
         
     
