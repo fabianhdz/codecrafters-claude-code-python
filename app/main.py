@@ -50,7 +50,7 @@ def main():
         params.appendleft(arg)
 
     if params:
-        messages.append({{"role": "user", "content": " ".join(params)}})
+        messages.append({"role": "user", "content": " ".join(params)})
 
 
     tools = [
