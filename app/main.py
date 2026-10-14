@@ -44,7 +44,6 @@ def main():
                 print(arg, file=sys.stderr)
                 skillBody = getSkillBody(arg[1:], list(params)) #/skill, arguments
                 messages.append({"role": "user", "content": skillBody})
-                params.clear()
                 continue
 
         params.appendleft(arg)
