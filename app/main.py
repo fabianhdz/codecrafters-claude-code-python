@@ -4,6 +4,7 @@ import sys
 import json
 import subprocess
 
+from collections import deque
 from openai import OpenAI
 
 from .skills import getSkills, getSkillBody
@@ -28,17 +29,28 @@ def main():
 
     model = "anthropic/claude-haiku-4.5"
     skills = getSkills()
-    arguments = args.p.split()
-
-    if args.p[0] == '/':    
-        print(arguments[0][1:], file=sys.stderr)
-        skillBody = getSkillBody(arguments[0][1:], arguments[1:]) #/skill, arguments
-        args.p = skillBody
-    
     messages =  [
                     {"role": "system", "content": f"You have access to the following:\n\n{"".join(skills)}"},
-                    {"role": "user", "content": args.p}
                 ]
+    arguments = args.p.split()
+
+    params = deque(list)
+    for arg in arguments[::-1]:
+
+        if arg[0] == '/':
+            file_path =  f".claude/skills/{arg[1:]}/SKILL.md"
+            if file_path.is_file():
+                print(arg, file=sys.stderr)
+                skillBody = getSkillBody(arg[1:], list(params)) #/skill, arguments
+                userContent = skillBody
+                messages.append({{"role": "user", "content": userContent}})
+                params.clear()
+
+        params.appendleft(arg)
+
+    if params:
+        messages.append({{"role": "user", "content": " ".join(params)}})
+
 
     tools = [
                 {
