@@ -34,7 +34,7 @@ def main():
                 ]
     arguments = args.p.split()
 
-    params = deque(list)
+    params = deque()
     for arg in arguments[::-1]:
 
         if arg[0] == '/':
@@ -45,6 +45,7 @@ def main():
                 userContent = skillBody
                 messages.append({{"role": "user", "content": userContent}})
                 params.clear()
+                continue
 
         params.appendleft(arg)
 
