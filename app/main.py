@@ -4,6 +4,7 @@ import sys
 import json
 import subprocess
 
+from pathlib import Path
 from collections import deque
 from openai import OpenAI
 
@@ -38,12 +39,11 @@ def main():
     for arg in arguments[::-1]:
 
         if arg[0] == '/':
-            file_path =  f".claude/skills/{arg[1:]}/SKILL.md"
+            file_path =  Path(f".claude/skills/{arg[1:]}/SKILL.md")
             if file_path.is_file():
                 print(arg, file=sys.stderr)
                 skillBody = getSkillBody(arg[1:], list(params)) #/skill, arguments
-                userContent = skillBody
-                messages.append({{"role": "user", "content": userContent}})
+                messages.append({{"role": "user", "content": skillBody}})
                 params.clear()
                 continue
 
