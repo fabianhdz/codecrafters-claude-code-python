@@ -35,21 +35,22 @@ def main():
                 ]
     arguments = args.p.split()
 
-    params = deque()
-    for arg in arguments[::-1]:
+    if arguments[0][0] == '/': 
+        params = deque()
+        for arg in arguments[::-1]:
 
-        if arg[0] == '/':
-            file_path =  Path(f".claude/skills/{arg[1:]}/SKILL.md")
-            if file_path.is_file():
-                print(arg, file=sys.stderr)
-                skillBody = getSkillBody(arg[1:], list(params)) #/skill, arguments
-                messages.append({"role": "user", "content": skillBody})
-                continue
+            if arg[0] == '/':
+                file_path =  Path(f".claude/skills/{arg[1:]}/SKILL.md")
+                if file_path.is_file():
+                    print(arg, file=sys.stderr)
+                    skillBody = getSkillBody(arg[1:], list(params)) #/skill, arguments
+                    messages.append({"role": "user", "content": skillBody})
+                    continue
 
-        params.appendleft(arg)
+            params.appendleft(arg)
+    else:
+        messages.append({"role": "user", "content": args.p})
 
-    if params:
-        messages.append({"role": "user", "content": " ".join(params)})
 
 
     tools = [
