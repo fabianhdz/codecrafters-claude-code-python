@@ -30,8 +30,16 @@ def main():
 
     model = "anthropic/claude-haiku-4.5"
     skills = getSkills()
+    system_prompt = (
+        "You have accesss to the following:\n\n"
+        f"{"".join(skills)}\n"
+        "If a skill matches the user's request, call the Skill tool with "
+        "its name and follow the isntructions it returns.\n"
+    )
+    print(system_prompt)
     messages =  [
-                    {"role": "system", "content": f"You have access to the following:\n\n{"".join(skills)}"},
+                    {"role": "system", "content": system_prompt},
+
                 ]
     arguments = args.p.split()
 
@@ -105,6 +113,21 @@ def main():
                                     "type": "string",
                                     "descripton": "The command to execute"
                                 }
+                            }
+                        }
+                    }
+                },
+                {
+                    "type": "function",
+                    "function": {
+                        "name": "Skill",
+                        "description": "Load a skill's instructions into the conversation",
+                        "parameters": {
+                            "type": "object",
+                            "required": ["name"],
+                            "properties": {
+                                "name": { "type": "string", "description": "The name of the skill to use" },
+                                "args": { "type": "string", "description": "Optional arguments for the skill" }
                             }
                         }
                     }
