@@ -25,8 +25,10 @@ def runBashTool(args: dict):
     return output.stdout
 
 def runSkillTool(args: dict) -> str:
+    arguments = []
 
-    arguments = args["args"].split()
+    if "args" in args:
+        arguments += args["args"].split()
 
     return getSkillBody(args["name"], arguments)
 
