@@ -1,7 +1,7 @@
 import subprocess
 import sys
 
-from skills import getSkillBody
+from .skills import getSkillBody
 
 
 
