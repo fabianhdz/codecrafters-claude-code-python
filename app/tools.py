@@ -1,6 +1,8 @@
 import subprocess
 import sys
 
+from skills import getSkillBody
+
 
 
 def runReadTool(args: dict) -> str:
@@ -21,12 +23,20 @@ def runBashTool(args: dict):
     if output.returncode:
         return output.stderr
     return output.stdout
-    
-def executeTool(name: str, args):
+
+def runSkillTool(args: dict) -> str:
+
+    arguments = args["args"].split()
+
+    return getSkillBody(args["name"], arguments)
+
+def executeTool(name: str, args: dict):
     if name == "Read":
         return runReadTool(args)
     elif name == "Write":
         return runWriteTool(args)
     elif name == "Bash":
         return runBashTool(args)
+    elif name == "Skill":
+        return runSkillTool(args)
     raise ValueError(f"Unknown function: {name}")

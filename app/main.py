@@ -36,7 +36,6 @@ def main():
         "If a skill matches the user's request, call the Skill tool with "
         "its name and follow the isntructions it returns.\n"
     )
-    print(system_prompt)
     messages =  [
                     {"role": "system", "content": system_prompt},
 
